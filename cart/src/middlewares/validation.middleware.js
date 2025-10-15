@@ -9,7 +9,6 @@ function validateResult(req, res, next) {
     next();
 }
 
-
 const validateAddItemToCart = [
     body('productId')
         .isString()

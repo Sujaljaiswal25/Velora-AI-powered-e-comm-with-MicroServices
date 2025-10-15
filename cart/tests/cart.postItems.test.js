@@ -48,7 +48,7 @@ describe('POST /api/cart/items', () => {
     });
 
     test('creates new cart and adds first item', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         const res = await request(app)
             .post(endpoint)
             .set('Authorization', `Bearer ${token}`)
@@ -62,7 +62,7 @@ describe('POST /api/cart/items', () => {
     });
 
     test('increments quantity when item already exists', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
 
         // First add
         await request(app)
@@ -82,7 +82,7 @@ describe('POST /api/cart/items', () => {
     });
 
     test('validation error for invalid productId', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         const res = await request(app)
             .post(endpoint)
             .set('Authorization', `Bearer ${token}`)
@@ -95,7 +95,7 @@ describe('POST /api/cart/items', () => {
     });
 
     test('validation error for non-positive qty', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         const res = await request(app)
             .post(endpoint)
             .set('Authorization', `Bearer ${token}`)
@@ -116,7 +116,7 @@ describe('POST /api/cart/items', () => {
     });
 
     test('403 when role not allowed', async () => {
-        const token = signToken({ _id: userId, role: 'admin' }); // role admin not in [user]
+        const token = signToken({ id: userId, role: 'admin' }); // role admin not in [user]
         const res = await request(app)
             .post(endpoint)
             .set('Authorization', `Bearer ${token}`)

@@ -2,6 +2,7 @@ const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const redis = require("../db/redis")
+const { publishToQueue } = require("../broker/borker")
 
 
 async function registerUser(req, res) {
@@ -28,6 +29,15 @@ async function registerUser(req, res) {
             password: hash,
             fullName: { firstName, lastName },
             role: role || 'user' // default role is 'user'
+        })
+
+
+        // publish user created event to rabbitmq
+        await publishToQueue('AUTH_NOTIFICATION.USER_CREATED', {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            fullName: user.fullName,
         })
 
         const token = jwt.sign({
@@ -131,7 +141,6 @@ async function logoutUser(req, res) {
     return res.status(200).json({ message: "Logged out successfully" });
 
 }
-
 
 async function getUserAddresses(req, res) {
 

@@ -38,6 +38,7 @@ async function registerUser(req, res) {
             username: user.username,
             email: user.email,
             fullName: user.fullName,
+            
         })
 
         const token = jwt.sign({
